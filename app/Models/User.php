@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'address',
+        'profile_image',
+        'national_id',
+        'license',
+        'role',
     ];
 
     /**
@@ -42,4 +48,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function vehicles() {
+        return $this->hasMany(Vehicle::class);
+    }
+
+    public function bookings() {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function reviews() {
+        return $this->hasMany(Review::class);
+    }
 }
