@@ -1,0 +1,65 @@
+.vehicle-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    padding: 20px;
+}
+
+.vehicle-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.booking-summary-mini {
+    background: #0d1117;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #8b949e;
+    border: 1px dashed #30363d;
+}
+
+.booking-summary-mini strong { color: #58a6ff; }
+
+.form-title { color: white; margin-bottom: 5px; }
+.form-desc { color: #8b949e; margin-bottom: 25px; font-size: 0.9rem; }
+
+.form-group { margin-bottom: 20px; text-align: left; }
+.form-group label { display: block; color: #f0f6fc; margin-bottom: 8px; font-size: 0.9rem; }
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 14px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group input:focus { border-color: #58a6ff; box-shadow: 0 0 0 2px rgba(88,166,255,0.1); }
+
+.next-btn {
+    width: 100%;
+    padding: 15px;
+    background: #238636;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.next-btn:hover { background: #2ea043; }

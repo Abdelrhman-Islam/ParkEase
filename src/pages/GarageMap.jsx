@@ -1,130 +1,119 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom'; // ضيف دي
 import api from '../api/axios';
-import '../layouts/GarageMap.css'; // تأكد إن ملف الـ CSS ده موجود
-
-const GaragesList = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    // جلب رقم الدور من الـ URL (الـ Query Params)، والديفولت 1
-    const queryParams = new URLSearchParams(location.search);
-    const initialFloor = parseInt(queryParams.get('floor')) || 1;
-
+import '../layouts/GarageMap.css';
+import ParkingSpot from '../components/ParkingSpot';
+    
+const GarageMap = () => {
+    const navigate = useNavigate(); // تعريف الـ navigate
     const [spots, setSpots] = useState([]);
-    const [currentFloor, setCurrentFloor] = useState(initialFloor);
+    const [levels, setLevels] = useState([]); 
+    const [currentLevel, setCurrentLevel] = useState(null);
     const [selectedSpot, setSelectedSpot] = useState(null);
-    const [loading, setLoading] = useState(true);
 
-    // تحديث البيانات كل ما الدور يتغير
     useEffect(() => {
-        fetchSpots();
-        // تحديث الـ URL عشان يعكس الدور الحالي (api/garages?floor=1)
-        navigate(`/garages?floor=${currentFloor}`, { replace: true });
-    }, [currentFloor]);
+        api.get('/spots').then(res => {
+            const data = res.data;
+            setSpots(data);
+            
+            const uniqueLevels = [...new Set(data.map(s => s.floor))].sort();
+            setLevels(uniqueLevels);
+            if (uniqueLevels.length > 0) setCurrentLevel(uniqueLevels[0]);
+        });
+    }, []);
 
-    const fetchSpots = async () => {
-        setLoading(true);
-        try {
-            // بنبعت رقم الدور للباك إند
-            const res = await api.get(`/spots?floor=${currentFloor}`);
-            setSpots(res.data);
-            setLoading(false);
-        } catch (err) {
-            console.error("Error fetching spots:", err);
-            setLoading(false);
-        }
+    const handleBooking = (spot) => {
+        // حساب الوقت تلقائياً: دلوقتي و بعد ساعة
+        const startTime = new Date();
+        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); 
+
+        // نبعت البيانات لصفحة الـ vehicle-form
+        navigate('/vehicle-form', { 
+            state: { 
+                spot, 
+                currentLevel,
+                times: {
+                    start: startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    end: endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }
+            } 
+        });
     };
 
-    const handleSpotClick = (spot) => {
-        // لو المكان مشغول (red)، ميعملش حاجة
-        if (spot.status === 'occupied') return;
-        // لو متاح (green)، نخليه selected (blue)
-        setSelectedSpot(spot);
-    };
+    const renderRows = () => {
+        const levelSpots = spots
+            .filter(s => String(s.floor) === String(currentLevel))
+            .sort((a, b) => a.id - b.id);
 
-    const bookNow = async () => {
-        if (!selectedSpot) return;
-        try {
-            await api.post('/bookings', {
-                spot_id: selectedSpot.id,
-                start_time: new Date().toISOString(), 
-                end_time: new Date(Date.now() + 3600000).toISOString() 
-            });
-            alert(`تم حجز ${selectedSpot.name} بنجاح ✅`);
-            setSelectedSpot(null);
-            fetchSpots(); // تحديث الخريطة فوراً
-        } catch (err) {
-            alert(err.response?.data?.message || "الحجز فشل");
+        if (levelSpots.length === 0) return <div className="text-muted p-5">No spots found.</div>;
+
+        const spotsPerRow = 10;
+        const rows = [];
+        for (let i = 0; i < levelSpots.length; i += spotsPerRow) {
+            rows.push(levelSpots.slice(i, i + spotsPerRow));
         }
+
+        return rows.map((rowItems, index) => (
+            <div key={index} className="parking-row-group">
+                <div className="row-label">R{index + 1}</div> 
+                <div className="parking-row">
+                    {rowItems.map(spot => (
+                        <ParkingSpot 
+                            key={spot.id} 
+                            spot={spot} 
+                            isSelected={selectedSpot?.id === spot.id} 
+                            onSelect={setSelectedSpot} 
+                        />
+                    ))}
+                </div>
+            </div>
+        ));
     };
 
     return (
-        <div className="page-wrapper bg-dark min-vh-100 text-white">
-            <Navbar />
-            
-            <div className="container-fluid py-4">
-                <div className="row">
-                    {/* 1. بار اختيار الدور (Sidebar) */}
-                    <div className="col-md-2 mb-4">
-                        <div className="card bg-secondary border-0 p-3">
-                            <h5 className="text-center mb-3">Floor</h5>
-                            {[1, 2, 3].map(floor => (
-                                <button 
-                                    key={floor}
-                                    className={`btn w-100 mb-2 ${currentFloor === floor ? 'btn-primary' : 'btn-outline-primary'}`}
-                                    onClick={() => { setCurrentFloor(floor); setSelectedSpot(null); }}
-                                >
-                                    Floor {floor}
-                                </button>
-                            ))}
+        <div className="parking-wrapper">
+            <div className="parking-container">
+                <div className="levels-sidebar">
+                    {levels.map((lvl, index) => (
+                        <button
+                            key={lvl}
+                            className={`level-btn ${currentLevel === lvl ? 'active' : ''}`}
+                            onClick={() => { setCurrentLevel(lvl); setSelectedSpot(null); }}
+                        >
+                            L{index + 1}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="map-card">
+                    <div className="map-header">
+                        <span className="current-lvl-text">Level {currentLevel}</span>
+                        <div className="map-legend">
+                            <span className="legend-item"><i className="box available"></i> Available</span>
+                            <span className="legend-item"><i className="box occupied"></i> Occupied</span>
+                            <span className="legend-item"><i className="box selected"></i> Selected</span>
                         </div>
                     </div>
 
-                    {/* 2. منطقة الخريطة (Spots Grid) */}
-                    <div className="col-md-10">
-                        <div className="card bg-secondary border-0 p-4">
-                            <div className="d-flex justify-content-between align-items-center mb-4">
-                                <h2>Find Your Spot - Floor {currentFloor}</h2>
-                                {/* Legend لتوضيح الألوان */}
-                                <div className="legend d-flex gap-3">
-                                    <span className="badge bg-success">● Available</span>
-                                    <span className="badge bg-danger">● Occupied</span>
-                                    <span className="badge bg-primary">● Selected</span>
-                                </div>
-                            </div>
-
-                            {loading ? (
-                                <div className="text-center loader">Loading map...</div>
-                            ) : (
-                                <div className="spots-grid">
-                                    {spots.map(spot => (
-                                        <div 
-                                            key={spot.id}
-                                            // بنحدد الكلاس بناءً على الـ status والـ selection
-                                            className={`spot-box 
-                                                ${spot.status === 'occupied' ? 'occupied' : 'available'} 
-                                                ${selectedSpot?.id === spot.id ? 'selected' : ''}`
-                                            }
-                                            onClick={() => handleSpotClick(spot)}
-                                        >
-                                            {spot.name}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                    <div className="parking-grid-area">
+                        <div className="entrance-tag">Entrance →</div>
+                        <div className="rows-container">
+                            {renderRows()}
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* 3. بار الحجز العائم (Booking Box) */}
+            
             {selectedSpot && (
-                <div className="booking-bar bg-primary text-white p-3 shadow fixed-bottom">
-                    <div className="container d-flex justify-content-between align-items-center">
-                        <h4>Spot: {selectedSpot.name} (Floor {currentFloor})</h4>
-                        <button className="btn btn-light btn-lg" onClick={bookNow}>Book Now</button>
+                <div className="booking-card-overlay">
+                    <div className="booking-card">
+                        <div className="booking-info">
+                            <h3 className="spot-title">Spot {selectedSpot.name}</h3>
+                            <p className="spot-subtitle">Level L{currentLevel} • Available Now</p>
+                        </div>
+                        <button className="book-now-btn" onClick={() => handleBooking(selectedSpot)}>
+                            Book Now
+                        </button>
                     </div>
                 </div>
             )}
@@ -132,4 +121,4 @@ const GaragesList = () => {
     );
 };
 
-export default GaragesList;
+export default GarageMap;

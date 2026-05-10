@@ -1,0 +1,38 @@
+.parking-spot {
+    width: 55px; /* نفس مقاسات الصورة */
+    height: 75px;
+    border-radius: 8px; /* حواف دائرية خفيفة */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #ffffff;
+    user-select: none;
+}
+
+/* حالة المتاح (أخضر) */
+.available {
+    background-color: #28a745;
+}
+
+.available:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* حالة المشغول (أحمر) */
+.occupied {
+    background-color: #dc3545;
+    cursor: not-allowed;
+}
+
+/* حالة المختار (أزرق) */
+.selected {
+    background-color: #007bff;
+    border: 2px solid #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+}

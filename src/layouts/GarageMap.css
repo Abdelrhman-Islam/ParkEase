@@ -1,37 +1,181 @@
-/* Footer الحجز اللي بيطلع من تحت */
-.booking-footer {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1e293b;
-    border: 1px solid #3b82f6;
-    padding: 15px 30px;
-    border-radius: 50px;
+.parking-wrapper {
+    background-color: #0d1117; /* لون الخلفية الغامق زي الصورة */
+    min-height: 100vh;
+    padding: 40px;
+    color: white;
+}
+
+.parking-container {
+    display: flex;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Sidebar */
+.levels-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.level-btn {
+    width: 150px;
+    height: 60px;
+    background: #21262d;
+    border: none;
+    border-radius: 12px;
+    color: #8b949e;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.level-btn.active {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+}
+
+/* Map Card */
+.map-card {
+    background: #161b22;
+    flex-grow: 1;
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid #30363d;
+}
+
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.map-legend { display: flex; gap: 20px; font-size: 0.9rem; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.box { width: 15px; height: 15px; border-radius: 4px; display: inline-block; }
+.box.available { background: #28a745; }
+.box.occupied { background: #dc3545; }
+.box.selected { background: #007bff; }
+
+/* Grid Area */
+.parking-grid-area {
+    position: relative;
+    padding-top: 30px;
+}
+
+.entrance-tag {
+    position: absolute;
+    top: -10px; left: 10px;
+    background: #21262d;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: #8b949e;
+}
+
+.rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.parking-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Spot Item */
+.spot-item {
+    width: 55px;
+    height: 70px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    z-index: 1000;
-    animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-    from { bottom: -100px; }
-    to { bottom: 20px; }
-}
-
-.confirm-btn {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 25px;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.spot-item.available { background: #28a745; color: white; }
+.spot-item.occupied { background: #dc3545; color: white; cursor: not-allowed; }
+.spot-item.selected { 
+    background: #007bff; 
+    border: 2px solid white; 
+    transform: scale(1.1); 
+}
+.parking-grid-auto {
+    display: flex;
+    flex-wrap: wrap; /* بيخلي الاسبوتات تلف للسطر اللي بعده لما العرض يخلص */
+    gap: 12px;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* حاوية الكارت السفلي */
+.booking-card-overlay {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+    z-index: 1000;
+}
+
+.booking-card {
+    background: #161b22; /* لون غامق متناسق مع الثيم */
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.3s ease-out;
+}
+
+/* نصوص المعلومات */
+.booking-info .spot-title {
+    margin: 0;
+    color: white;
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
-.confirm-btn:hover { background: #1d4ed8; }
+.booking-info .spot-subtitle {
+    margin: 5px 0 0;
+    color: #8b949e;
+    font-size: 0.9rem;
+}
 
-.legend { display: flex; gap: 15px; margin-bottom: 10px; }
-.badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; }
+/* زرار الحجز */
+.book-now-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.book-now-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+}
+
+/* حركة دخول الكارت */
+@keyframes slideUp {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
