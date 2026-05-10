@@ -1,0 +1,37 @@
+/* Footer الحجز اللي بيطلع من تحت */
+.booking-footer {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    border: 1px solid #3b82f6;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { bottom: -100px; }
+    to { bottom: 20px; }
+}
+
+.confirm-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.confirm-btn:hover { background: #1d4ed8; }
+
+.legend { display: flex; gap: 15px; margin-bottom: 10px; }
+.badge { padding: 4px 10px; border-radius: 4px; font-size: 12px; }
