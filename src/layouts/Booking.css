@@ -1,0 +1,175 @@
+.booking-page {
+    min-height: 100vh;
+    background: #050816;
+    padding: 60px 40px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.booking-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.booking-left {
+    width: 500px;
+}
+
+.back-btn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 40px;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    color: white;
+}
+
+.spot-title {
+    font-size: 4rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.spot-level {
+    color: #94a3b8;
+    font-size: 1.3rem;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+.input-group {
+    margin-bottom: 25px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 12px;
+    color: #d1d5db;
+    font-size: 0.95rem;
+}
+
+.input-wrapper input {
+    width: 100%;
+    height: 70px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 20px;
+    padding: 0 20px;
+    color: white;
+    font-size: 1.3rem;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.pricing-card {
+    width: 380px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 28px;
+    padding: 40px;
+    margin-top: 170px;
+}
+
+.pricing-card h2 {
+    margin: 0 0 35px;
+    font-size: 2rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    color: #d1d5db;
+    font-size: 1.1rem;
+}
+
+.summary-row strong {
+    color: white;
+}
+
+.divider {
+    height: 1px;
+    background: #273244;
+    margin: 35px 0;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-total span {
+    font-size: 1.5rem;
+}
+
+.summary-total h1 {
+    color: #1677ff;
+    font-size: 3rem;
+    margin: 0;
+}
+
+.next-step-btn {
+    width: 100%;
+    max-width: 920px;
+    margin: 50px auto 0;
+    height: 75px;
+    border: none;
+    border-radius: 22px;
+    background: #1677ff;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.next-step-btn:hover {
+    background: #3184ff;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+
+    .booking-page {
+        padding: 30px 20px;
+    }
+
+    .booking-container {
+        flex-direction: column;
+    }
+
+    .booking-left,
+    .pricing-card {
+        width: 100%;
+    }
+
+    .pricing-card {
+        margin-top: 0;
+    }
+
+    .spot-title {
+        font-size: 3rem;
+    }
+}

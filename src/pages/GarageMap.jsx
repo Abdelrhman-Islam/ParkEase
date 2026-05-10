@@ -28,7 +28,7 @@ const GarageMap = () => {
         const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); 
 
         // نبعت البيانات لصفحة الـ vehicle-form
-        navigate('/vehicle-form', { 
+        navigate('/booking', { 
             state: { 
                 spot, 
                 currentLevel,

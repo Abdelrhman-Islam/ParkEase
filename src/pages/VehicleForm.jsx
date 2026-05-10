@@ -6,91 +6,147 @@ import '../layouts/VehicleForm.css';
 const VehicleForm = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    
-    // استقبال البيانات من صفحة الخريطة
-    const { spot, currentLevel, times } = location.state || {};
 
-    const [formData, setFormData] = useState({
-        plate_number: '',
-        vehicle_type: 'Sedan'
+    const { spot, times } = location.state || {};
+
+    const [info, setInfo] = useState({
+        fullName: '',
+        phoneNumber: '',
+        driverLicenseId: '',
+        plateNumber: ''
     });
 
-    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        if (!spot || !times) {
+            navigate('/booking');
+        }
+    }, [spot, times, navigate]);
 
     useEffect(() => {
-        // سحب بيانات اليوزر من الـ API (الملف الشخصي)
         api.get('/user-profile')
-            .then(res => {
-                if (res.data.vehicle) {
-                    setFormData({
-                        plate_number: res.data.vehicle.plate_number || '',
-                        vehicle_type: res.data.vehicle.type || 'Sedan'
-                    });
-                }
-                setLoading(false);
+            .then((res) => {
+                setInfo({
+                    fullName: res.data.name || '',
+                    phoneNumber: res.data.phone || '',
+                    driverLicenseId: res.data.license?.number || '',
+                    plateNumber: res.data.vehicle?.plate_number || ''
+                });
             })
-            .catch(err => {
-                console.error("Couldn't fetch user data", err);
-                setLoading(false);
-            });
+            .catch(() => {});
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleChange = (field, value) => {
+        setInfo(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    const handleContinue = (e) => {
         e.preventDefault();
-        // نقل كل البيانات لصفحة الدفع
-        navigate('/payment', { 
-            state: { 
-                spot, 
-                currentLevel, 
-                times, 
-                vehicle: formData 
-            } 
+
+        navigate('/payment', {
+            state: {
+                spot,
+                times,
+                info: {
+                    driverName: info.fullName,
+                    plateNumber: info.plateNumber,
+                    phoneNumber: info.phoneNumber,
+                    driverLicenseId: info.driverLicenseId
+                }
+            }
         });
     };
 
-    if (loading) return <div className="loading">Loading user data...</div>;
-
     return (
-        <div className="vehicle-wrapper">
-            <div className="vehicle-card">
-                <div className="booking-summary-mini">
-                    <span>Spot: <strong>{spot?.name}</strong></span>
-                    <span>Level: <strong>L{currentLevel}</strong></span>
-                    <span>Time: <strong>{times?.start} - {times?.end}</strong></span>
+        <main className="vehicle-page">
+            <section className="form-card">
+
+                <button
+                    className="back-link"
+                    onClick={() => navigate(-1)}
+                >
+                    ← Back
+                </button>
+
+                <div className="hero">
+                    <h1>Vehicle & Driver Details</h1>
+
+                    <p>
+                        Please provide your information for entry access
+                    </p>
                 </div>
 
-                <h2 className="form-title">Vehicle Details</h2>
-                <p className="form-desc">Confirm or update your vehicle info</p>
+                <form className="details-form" onSubmit={handleContinue}>
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Car Plate Number</label>
-                        <input 
-                            type="text" 
-                            value={formData.plate_number}
-                            onChange={(e) => setFormData({...formData, plate_number: e.target.value})}
-                            placeholder="Ex: 123 ABC"
+                    <div className="field-group">
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            placeholder="John Doe"
+                            value={info.fullName}
+                            onChange={(e) =>
+                                handleChange('fullName', e.target.value)
+                            }
                             required
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Vehicle Type</label>
-                        <select 
-                            value={formData.vehicle_type}
-                            onChange={(e) => setFormData({...formData, vehicle_type: e.target.value})}
-                        >
-                            <option value="Sedan">Sedan</option>
-                            <option value="SUV">SUV</option>
-                            <option value="Motorcycle">Motorcycle</option>
-                            <option value="Truck">Truck</option>
-                        </select>
+                    <div className="field-group">
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            placeholder="+1 (555) 000-0000"
+                            value={info.phoneNumber}
+                            onChange={(e) =>
+                                handleChange('phoneNumber', e.target.value)
+                            }
+                            required
+                        />
                     </div>
 
-                    <button type="submit" className="next-btn">Continue to Payment</button>
+                    <div className="field-group">
+                        <label>Driver License / ID</label>
+
+                        <input
+                            type="text"
+                            placeholder="DL123456789"
+                            value={info.driverLicenseId}
+                            onChange={(e) =>
+                                handleChange('driverLicenseId', e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className="field-group">
+                        <label>License Plate Number</label>
+
+                        <input
+                            type="text"
+                            placeholder="ABC-1234"
+                            value={info.plateNumber}
+                            onChange={(e) =>
+                                handleChange('plateNumber', e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <p className="note">
+                        Your plate number will be used to generate your entry pass for gate access.
+                    </p>
+
+                    <button type="submit" className="submit-btn">
+                        Continue to Payment
+                    </button>
+
                 </form>
-            </div>
-        </div>
+            </section>
+        </main>
     );
 };
 

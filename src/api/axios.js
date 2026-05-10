@@ -1,17 +1,17 @@
 import axios from 'axios';
-console.log("My API URL is:", import.meta.env.VITE_API_BASE_URL);
+import Cookies from 'js-cookie'; // لازم تعمل npm install js-cookie
+
 const api = axios.create({
-    // ده العنوان اللي هتغيره لما ترفع على السيرفر
     baseURL: import.meta.env.VITE_API_BASE_URL,
+    withCredentials: true, // مهم جداً عشان الكوكيز تتبعت مع الريكويست
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
 });
 
-// Interceptor عشان يضيف التوكن في كل ريكويست لوحده
 api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token'); // سحب التوكن من الكوكي
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

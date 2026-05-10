@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import api from '../../api/axios'; // تأكد من المسار
+import api from '../../api/axios'; 
 
 const Register = () => {
     const navigate = useNavigate();
@@ -9,26 +10,29 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
-        password_confirmation: '', // ضيف ده لو الباك بطلبه
+        password_confirmation: '', 
         phone: ''
     });
 
     const handleRegister = async () => {
-        // حتة جدعنة: تأكد إن الخانات مش فاضية قبل ما تبعت
         if(!formData.email || !formData.password) {
-            alert("املي البيانات يا هندسة");
+            alert("Missing Data");
             return;
         }
 
         try {
-            // استخدمنا api اللي عملنا لها import
             const res = await api.post('/register', formData);
-            localStorage.setItem('token', res.data.token);
+            
+            // سحب التوكن أياً كان مسماه من الباك إند
+            const token = res.data.token || res.data.access_token;
+            
+            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+            
             navigate('/garages');
         } catch (err) {
-            // عشان تعرف السبب بالظبط بص في الكونسول
             console.error(err.response?.data);
-            alert(err.response?.data?.message || "خطأ في التسجيل");
+            alert(err.response?.data?.message || "Registration error");
         }
     };
 
@@ -51,7 +55,6 @@ const Register = () => {
                     type="password" 
                     placeholder="Password" 
                     onChange={(e) => setFormData({...formData, password: e.target.value, password_confirmation: e.target.value})} 
-                    // حيلة سريعة: بنخلي الـ confirmation هو نفسه الـ password عشان ننجز
                 />
                 <input 
                     type="text" 
