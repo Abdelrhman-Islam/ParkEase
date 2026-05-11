@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Onboarding from './pages/Onboarding';
-import Login from './pages/auth/Login'; // هتعملهم بعدين بنفس الستايل
+import Login from './pages/auth/Login'; 
 import Register from './pages/auth/Register';
 import GarageMap from './pages/GarageMap';
 import MyBookings from './pages/MyBookings';
@@ -28,6 +28,7 @@ function App() {
           <Route path="/garages" element={<GarageMap />} />
           <Route path='/vehicle-form' element = {<VehicleForm/>}/>
           <Route path='/booking' element = {<Booking/>}/>
+          <Route path="/my-bookings" element={<MyBookings />} />
 
         </Route>
 

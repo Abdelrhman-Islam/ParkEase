@@ -1,0 +1,181 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0d0f14;
+  color: white;
+}
+
+/* Container */
+
+.my-bookings-container {
+  width: 90%;
+  max-width: 900px;
+  margin: 40px auto;
+}
+
+.my-bookings-container h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+/* Tabs */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.tab {
+  width: 300px;
+  padding: 15px;
+  border-radius: 15px;
+  border: none;
+  background: #1f2233;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.tab.active {
+  background: #1976d2;
+  color: white;
+  box-shadow: 0 0 0 2px white inset;
+}
+
+/* Cards */
+
+.card {
+  background: #1a1d26;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border: 1px solid #2c2f3a;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card h3 {
+  font-size: 24px;
+  color: white;
+}
+
+.card p {
+  color: #aaa;
+  margin-top: 8px;
+}
+
+/* Info */
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  color: #aaa;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Divider */
+
+.divider {
+  margin: 15px 0;
+  border-top: 1px solid #2c2f3a;
+}
+
+/* Price */
+
+.price {
+  text-align: right;
+  color: #1e90ff;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Status */
+
+.status {
+  padding: 6px 15px;
+  border-radius: 12px;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.completed {
+  background: rgba(100, 100, 120, 0.2);
+  border: 1px solid #444;
+  color: #ddd;
+}
+
+.cancelled {
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid #f44336;
+  color: #f44336;
+}
+
+.active-status {
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+}
+
+/* Tabs Content */
+
+.tab-content {
+  display: block;
+}
+
+/* Loading */
+
+.loading,
+.empty-text {
+  text-align: center;
+  color: #aaa;
+  margin-top: 40px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .my-bookings-container {
+    width: 90%;
+    margin: 30px auto;
+  }
+
+  .tabs {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tab {
+    width: 100%;
+  }
+
+  .info {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .price {
+    position: static;
+    margin-top: 10px;
+    text-align: right;
+  }
+}
