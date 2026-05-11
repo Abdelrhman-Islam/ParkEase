@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // ضيف دي
 import api from '../api/axios';
 import '../layouts/GarageMap.css';
+import Navbar from '../components/Navbar';
 import ParkingSpot from '../components/ParkingSpot';
     
 const GarageMap = () => {
@@ -21,7 +22,7 @@ const GarageMap = () => {
             if (uniqueLevels.length > 0) setCurrentLevel(uniqueLevels[0]);
         });
     }, []);
-
+    
     const handleBooking = (spot) => {
         // حساب الوقت تلقائياً: دلوقتي و بعد ساعة
         const startTime = new Date();
@@ -71,6 +72,9 @@ const GarageMap = () => {
     };
 
     return (
+        <>
+
+        <Navbar/>
         <div className="parking-wrapper">
             <div className="parking-container">
                 <div className="levels-sidebar">
@@ -118,6 +122,7 @@ const GarageMap = () => {
                 </div>
             )}
         </div>
+        </>
     );
 };
 

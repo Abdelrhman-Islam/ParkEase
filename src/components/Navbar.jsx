@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
+    const isAuth = Cookies.get('token');
     return(
     <>
         
@@ -14,12 +16,22 @@ const Navbar = () => {
             </div>
 
             <nav className="auth-actions">
-            <Link to="/login" className="sign-in">Sign In</Link>
-            <Link to="/register" className="sign-up">Sign Up</Link>
+                {isAuth ? (
+                    <>
+                        <Link to="/my-bookings" className="sign-in">My Bookings</Link>
+                        <button onClick={() => { Cookies.remove('token'); window.location.href='/'; }} className="sign-up">Logout</button>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/login" className="sign-in">Sign In</Link>
+                        <Link to="/register" className="sign-up">Sign Up</Link>
+                    </>
+                )}
             </nav>
         </header>
     </>
     )
 }
+
 
 export default Navbar;

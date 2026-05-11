@@ -2,11 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import '../layouts/VehicleForm.css';
-
+import Navbar from '../components/Navbar';
 const VehicleForm = () => {
+
+
+
+    const handleContinue = async (e) => {
+    e.preventDefault();
+    try {
+        // 1. تسجيل العربية الأول (أو التأكد من وجودها)
+        const vehicleRes = await api.post('/vehicles', {
+            plate_number: info.plateNumber,
+            type: 'car', // ديفولت
+            license: info.driverLicenseId,
+            model: 'Generic'
+        });
+
+        // 2. عمل الحجز (Booking)
+        const bookingPayload = {
+            spot_id: spot.id,
+            vehicle_id: vehicleRes.data.vehicle.id,
+            booking_date: times.date,
+            start_time: `${times.date} ${times.start}`,
+            end_time: `${times.date} ${times.end}`,
+        };
+        const bookingRes = await api.post('/bookings', bookingPayload);
+
+        // 3. تأكيد الدفع اليدوي (Cash/Fake Payment) عشان يقلب Confirmed
+        await api.post(`/payments/${bookingRes.data.id}`);
+
+        alert("تم الحجز بنجاح! تقدر تروح الجراج دلوقتي.");
+        navigate('/my-bookings');
+    } catch (err) {
+        console.error(err);
+        alert("حصل مشكلة في الحجز، تأكد من البيانات.");
+    }
+};
+
+
     const location = useLocation();
     const navigate = useNavigate();
-
+    
     const { spot, times } = location.state || {};
 
     const [info, setInfo] = useState({
@@ -23,7 +59,7 @@ const VehicleForm = () => {
     }, [spot, times, navigate]);
 
     useEffect(() => {
-        api.get('/user-profile')
+        api.get('/user')
             .then((res) => {
                 setInfo({
                     fullName: res.data.name || '',
@@ -42,24 +78,11 @@ const VehicleForm = () => {
         }));
     };
 
-    const handleContinue = (e) => {
-        e.preventDefault();
-
-        navigate('/payment', {
-            state: {
-                spot,
-                times,
-                info: {
-                    driverName: info.fullName,
-                    plateNumber: info.plateNumber,
-                    phoneNumber: info.phoneNumber,
-                    driverLicenseId: info.driverLicenseId
-                }
-            }
-        });
-    };
+  
 
     return (
+        <>
+        <Navbar/>
         <main className="vehicle-page">
             <section className="form-card">
 
@@ -147,6 +170,7 @@ const VehicleForm = () => {
                 </form>
             </section>
         </main>
+        </>
     );
 };
 

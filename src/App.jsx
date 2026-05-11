@@ -6,6 +6,9 @@ import GarageMap from './pages/GarageMap';
 import MyBookings from './pages/MyBookings';
 import VehicleForm from './pages/VehicleForm';
 import Booking from './pages/Booking';
+
+import ProtectedRoute from './guards/ProtectedRoute';
+
 import './App.css'
 
 function App() {
@@ -19,11 +22,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
-        {/* صفحة الجراجات بعد اللوجين */}
-        <Route path="/garages" element={<GarageMap />} />
 
-        <Route path='/vehicle-form' element = {<VehicleForm/>}/>
-        <Route path='/booking' element = {<Booking/>}/>
+        <Route element={<ProtectedRoute />}>
+
+          <Route path="/garages" element={<GarageMap />} />
+          <Route path='/vehicle-form' element = {<VehicleForm/>}/>
+          <Route path='/booking' element = {<Booking/>}/>
+
+        </Route>
+
+
       </Routes>
     </Router>
   );

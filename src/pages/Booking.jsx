@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../layouts/Booking.css';
-
+import Navbar from '../components/Navbar';
+import GarageMap from './GarageMap';
 const Booking = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
 
     const { spot } = location.state || {};
-
+    
     // =========================
     // Helpers
     // =========================
@@ -40,68 +41,56 @@ const Booking = () => {
         start: formatTime(now),
         end: formatTime(oneHourLater)
     });
-
     // =========================
     // Redirect if no spot
     // =========================
+    const hourlyRate = spot?.garage?.price || 15; // لو مفيش سعر نثبت 15 كديفولت
+useEffect(() => {
+    if (!spot) {
+        navigate('/vehicle-form');
+    }
+}, [spot, navigate]);
 
-    useEffect(() => {
-        if (!spot) {
-            navigate('/garage');
-        }
-    }, [spot, navigate]);
+const calculateDuration = () => {
 
-    // =========================
-    // Calculate Duration
-    // =========================
+    const start = new Date(
+        `${times.date}T${times.start}`
+    );
 
-    const calculateHours = () => {
+    const end = new Date(
+        `${times.date}T${times.end}`
+    );
 
-        const start = new Date(
-            `2000-01-01T${times.start}`
-        );
+    const diff =
+        (end - start) / (1000 * 60 * 60);
 
-        const end = new Date(
-            `2000-01-01T${times.end}`
-        );
+    return diff > 0 ? diff : 0;
+};
 
-        const diff =
-            (end - start) / (1000 * 60 * 60);
+const duration = calculateDuration();
 
-        return diff > 0 ? diff : 0;
-    };
+const total = duration * hourlyRate;
 
-    // =========================
-    // Pricing
-    // =========================
-
-    const hourlyRate = 5;
-
-    const duration = calculateHours();
-
-    const total = duration * hourlyRate;
 
     // =========================
     // Continue
     // =========================
 
     const handleNext = () => {
+        // نبعت البيانات لصفحة العربية
 
-        if (!times.date ||
-            !times.start ||
-            !times.end) {
-            return;
+    navigate('/vehicle-form', {
+        state: {
+            spot,
+            times,
+            total
         }
+    });
 
-        navigate('/vehicle-form', {
-            state: {
-                spot,
-                times
-            }
-        });
     };
-
     return (
+        <>
+        <Navbar/>
         <div className="booking-page">
 
             <div className="booking-container">
@@ -183,6 +172,7 @@ const Booking = () => {
                                 <input
                                     type="time"
                                     value={times.end}
+                                    min={times.start}
                                     onChange={(e) =>
                                         setTimes({
                                             ...times,
@@ -209,7 +199,7 @@ const Booking = () => {
                         <span>Hourly Rate</span>
 
                         <strong>
-                            ${hourlyRate.toFixed(2)}/hr
+                            ${hourlyRate}/hr
                         </strong>
                     </div>
 
@@ -250,6 +240,7 @@ const Booking = () => {
             </button>
 
         </div>
+        </>
     );
 };
 

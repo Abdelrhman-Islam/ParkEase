@@ -33,7 +33,7 @@ const Onboarding = () => {
             />
           </div>
 
-          <Link to="/register" className="cta-button">Get Started</Link>
+          <Link to="/garages" className="cta-button">Get Started</Link>
         </section>
 
         <section className="hero-visual">
