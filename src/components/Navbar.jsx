@@ -10,7 +10,7 @@ const Navbar = () => {
         <header className="topbar">
             <div className="brand">
             <span className="brand-icon">
-                <img src="../../public/car_fixed_transparent.png" alt="Logo" className="brand-icon-image" />
+                <img src="/car_fixed_transparent.png" alt="Logo" className="brand-icon-image" />
             </span>
             <Link to={"/"} className="brand-name">ParkEase</Link>
             </div>
@@ -19,6 +19,8 @@ const Navbar = () => {
                 {isAuth ? (
                     <>
                         <Link to="/my-bookings" className="sign-in">My Bookings</Link>
+                        <Link to="/add-vehicle" className="sign-in">Add Vehicle</Link>
+
                         <button onClick={() => { Cookies.remove('token'); window.location.href='/'; }} className="sign-up">Logout</button>
                     </>
                 ) : (

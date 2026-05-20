@@ -6,7 +6,7 @@ import GarageMap from './pages/GarageMap';
 import MyBookings from './pages/MyBookings';
 import VehicleForm from './pages/VehicleForm';
 import Booking from './pages/Booking';
-
+import AddVehicle from './pages/AddVehicleForm';
 import ProtectedRoute from './guards/ProtectedRoute';
 
 import './App.css'
@@ -24,8 +24,9 @@ function App() {
         
 
         <Route element={<ProtectedRoute />}>
-
+          
           <Route path="/garages" element={<GarageMap />} />
+          <Route path="/add-vehicle" element={<AddVehicle />} />
           <Route path='/vehicle-form' element = {<VehicleForm/>}/>
           <Route path='/booking' element = {<Booking/>}/>
           <Route path="/my-bookings" element={<MyBookings />} />

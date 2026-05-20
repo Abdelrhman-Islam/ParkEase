@@ -17,8 +17,8 @@ const MyBookings = () => {
 
                 const res = await api.get('/my-bookings');
 
-                setBookings(res.data.data || []);
-
+                setBookings(res.data ?? []);
+               
             } catch (err) {
 
                 console.error(err);

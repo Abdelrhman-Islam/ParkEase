@@ -8,37 +8,29 @@ const VehicleForm = () => {
 
 
     const handleContinue = async (e) => {
-    e.preventDefault();
-    try {
-        // 1. تسجيل العربية الأول (أو التأكد من وجودها)
-        const vehicleRes = await api.post('/vehicles', {
-            plate_number: info.plateNumber,
-            type: 'car', // ديفولت
-            license: info.driverLicenseId,
-            model: 'Generic'
-        });
+        e.preventDefault();
 
-        // 2. عمل الحجز (Booking)
-        const bookingPayload = {
-            spot_id: spot.id,
-            vehicle_id: vehicleRes.data.vehicle.id,
-            booking_date: times.date,
-            start_time: `${times.date} ${times.start}`,
-            end_time: `${times.date} ${times.end}`,
-        };
-        const bookingRes = await api.post('/bookings', bookingPayload);
+        try {
+            // Construct ISO strings to avoid timezone/format mismatches
+            const startTime = new Date(`${times.date}T${times.start}:00`).toISOString();
+            const endTime = new Date(`${times.date}T${times.end}:00`).toISOString();
 
-        // 3. تأكيد الدفع اليدوي (Cash/Fake Payment) عشان يقلب Confirmed
-        await api.post(`/payments/${bookingRes.data.id}`);
+            await api.post('/bookings', {
+                spot_id: spot.id,
+                plate_number: info.plateNumber,
+                booking_date: times.date,
+                start_time: startTime,
+                end_time: endTime,
+            });
 
-        alert("تم الحجز بنجاح! تقدر تروح الجراج دلوقتي.");
-        navigate('/my-bookings');
-    } catch (err) {
-        console.error(err);
-        alert("حصل مشكلة في الحجز، تأكد من البيانات.");
-    }
-};
-
+            alert("تم الحجز بنجاح!");
+            navigate('/my-bookings');
+        } catch (err) {
+            // Log detailed error for debugging
+            console.error("Booking failed:", err.response?.data || err.message);
+            alert(err.response?.data?.message || "حصل خطأ أثناء الحجز");
+        }
+    };
 
     const location = useLocation();
     const navigate = useNavigate();
