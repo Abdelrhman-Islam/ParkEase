@@ -1,35 +1,41 @@
 .parking-wrapper {
-    background-color: #0d1117; /* لون الخلفية الغامق زي الصورة */
+    background-color: #0d1117;
     min-height: 100vh;
-    padding: 40px;
+    padding: 20px; /* تقليل البادينج ليناسب الموبايل */
     color: white;
+    box-sizing: border-box;
 }
 
 .parking-container {
     display: flex;
+    flex-direction: column; /* الترتيب الافتراضي للموبايل فوق بعض */
     gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Sidebar */
+/* Sidebar Levels */
 .levels-sidebar {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* جعل الأزرار أفقية في الموبايل */
     gap: 10px;
+    overflow-x: auto; /* السماح بالتمرير الأفقي لو الأزرار كثيرة */
+    padding-bottom: 5px;
 }
 
 .level-btn {
-    width: 150px;
-    height: 60px;
+    flex: 1;
+    min-width: 80px; /* حجم أصغر يناسب الشاشات الصغيرة */
+    height: 45px;
     background: #21262d;
     border: none;
     border-radius: 12px;
     color: #8b949e;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
+    white-space: nowrap;
 }
 
 .level-btn.active {
@@ -43,19 +49,26 @@
     background: #161b22;
     flex-grow: 1;
     border-radius: 20px;
-    padding: 30px;
+    padding: 15px; /* تقليل البادينج الداخلي */
     border: 1px solid #30363d;
+    overflow-x: hidden; /* منع خروج الكارت عن الشاشة */
 }
 
 .map-header {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
+    flex-direction: column; /* ترتيب العناصر تحت بعض في الموبايل */
+    gap: 15px;
+    margin-bottom: 25px;
 }
 
-.map-legend { display: flex; gap: 20px; font-size: 0.9rem; }
+.map-legend { 
+    display: flex; 
+    flex-wrap: wrap; /* السماح للمفاتيح بالنزول لسطر جديد */
+    gap: 15px; 
+    font-size: 0.85rem; 
+}
 .legend-item { display: flex; align-items: center; gap: 8px; }
-.box { width: 15px; height: 15px; border-radius: 4px; display: inline-block; }
+.box { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
 .box.available { background: #28a745; }
 .box.occupied { background: #dc3545; }
 .box.selected { background: #007bff; }
@@ -63,12 +76,13 @@
 /* Grid Area */
 .parking-grid-area {
     position: relative;
-    padding-top: 30px;
+    padding-top: 35px;
 }
 
 .entrance-tag {
     position: absolute;
-    top: -10px; left: 10px;
+    top: 0; 
+    left: 0;
     background: #21262d;
     padding: 4px 12px;
     border-radius: 6px;
@@ -79,19 +93,32 @@
 .rows-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+}
+
+.parking-row-group {
+    display: flex;
+    flex-direction: column; /* جعل اسم الصف فوق المربعات في الموبايل */
+    gap: 8px;
+}
+
+.row-label {
+    font-weight: bold;
+    color: #8b949e;
+    font-size: 0.9rem;
 }
 
 .parking-row {
     display: flex;
-    gap: 10px;
-    justify-content: center;
+    flex-wrap: wrap; /* أهم تعديل: يخلي المربعات تلف للسطر الثاني بدل ما تخرج برا الشاشة */
+    gap: 8px;
+    justify-content: flex-start;
 }
 
 /* Spot Item */
 .spot-item {
-    width: 55px;
-    height: 70px;
+    width: 48px; /* تصغير العرض قليلاً ليناسب الشاشات الصغيرة */
+    height: 55px; /* تصغير الارتفاع */
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -107,75 +134,108 @@
 .spot-item.selected { 
     background: #007bff; 
     border: 2px solid white; 
-    transform: scale(1.1); 
-}
-.parking-grid-auto {
-    display: flex;
-    flex-wrap: wrap; /* بيخلي الاسبوتات تلف للسطر اللي بعده لما العرض يخلص */
-    gap: 12px;
-    justify-content: center;
-    padding: 20px;
+    transform: scale(1.05); 
 }
 
 /* حاوية الكارت السفلي */
 .booking-card-overlay {
     position: fixed;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 600px;
-    padding: 0 20px;
+    max-width: 500px;
+    padding: 0 15px;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 .booking-card {
-    background: #161b22; /* لون غامق متناسق مع الثيم */
+    background: #161b22;
     border: 1px solid #30363d;
-    border-radius: 20px;
-    padding: 20px 30px;
+    border-radius: 16px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease-out;
 }
 
-/* نصوص المعلومات */
 .booking-info .spot-title {
     margin: 0;
     color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.2rem;
 }
 
 .booking-info .spot-subtitle {
-    margin: 5px 0 0;
+    margin: 4px 0 0;
     color: #8b949e;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
-/* زرار الحجز */
 .book-now-btn {
     background: #007bff;
     color: white;
     border: none;
-    padding: 12px 40px;
-    border-radius: 12px;
-    font-size: 1.1rem;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
+    white-space: nowrap;
 }
 
-.book-now-btn:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-}
-
-/* حركة دخول الكارت */
 @keyframes slideUp {
-    from { transform: translateY(100px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from { transform: translate(-50%, 100px); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
 }
+
+/* -----------------------------------------
+   الشاشات الكبيرة (الكمبيوتر والتابلت العريض)
+----------------------------------------- */
+@media (min-width: 768px) {
+    .parking-wrapper {
+        padding: 40px;
+    }
+
+    .parking-container {
+        flex-direction: row; /* إرجاع السايدبار على اليسار */
+    }
+
+    .levels-sidebar {
+        flex-direction: column; /* الأزرار تحت بعض */
+        overflow-x: visible;
+    }
+
+    .level-btn {
+        width: 120px;
+        height: 60px;
+    }
+
+    .map-card {
+        padding: 30px;
+    }
+
+    .map-header {
+        flex-direction: row; /* إرجاع العناوين بجانب بعضها */
+        align-items: center;
+    }
+
+    .parking-row-group {
+        flex-direction: row; /* إرجاع اسم الصف بجانب المربعات */
+        align-items: center;
+    }
+
+    .row-label {
+        min-width: 40px;
+    }
+
+    .spot-item {
+        width: 55px;
+        height: 70px;
+    }
+}
+

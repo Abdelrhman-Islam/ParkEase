@@ -50,7 +50,6 @@ const GarageMap = () => {
             } 
         });
     };
-
     const renderRows = () => {
         const levelSpots = spots
             .filter(s => String(s.floor) === String(currentLevel))
@@ -58,6 +57,7 @@ const GarageMap = () => {
 
         if (levelSpots.length === 0) return <div className="text-muted p-5">No spots found.</div>;
 
+        // نقسم المربعات بناءً على البيانات القادمة
         const spotsPerRow = 10;
         const rows = [];
         for (let i = 0; i < levelSpots.length; i += spotsPerRow) {
@@ -66,7 +66,9 @@ const GarageMap = () => {
 
         return rows.map((rowItems, index) => (
             <div key={index} className="parking-row-group">
+                {/* اسم الصف */}
                 <div className="row-label">R{index + 1}</div> 
+                {/* مربعات الركنة التابعة للصف */}
                 <div className="parking-row">
                     {rowItems.map(spot => (
                         <ParkingSpot 
