@@ -206,3 +206,135 @@
         margin-bottom: 10px;
     }
 }
+
+
+
+/* ============================================== */
+/* إصلاح هيكل الفورم والـ Flexbox لصفحة المركبة */
+/* ============================================== */
+
+/* 1. ضبط كارت المركبة ليرتب الفورم بشكل عمودي صحيح */
+.vehicle-card {
+    display: flex;
+    flex-direction: column;
+    width: 350px; /* نفس عرض الـ container القديم */
+    margin: 10px auto;
+}
+
+/* 2. جعل الفورم يمرر الترتيب العمودي والمسافات */
+.vehicle-card form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* 3. تنسيق الـ wrappers لعمل مسافات بين الحقول (Labels & Inputs) */
+.vehicle-card .input-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* لجعل الـ labels محاذية لليسار فوق الـ input */
+    margin: 10px 0;
+}
+
+.vehicle-card .input-wrapper label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: white;
+}
+
+/* 4. إجبار حقول الإدخال والـ select على أخذ نفس الستايل الموحد */
+.vehicle-card form input,
+.vehicle-card form select {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    background: #1c1c1c;
+    color: white;
+    outline: none;
+    box-sizing: border-box; /* تمنع تخطي الأبعاد المحددة */
+    font-family: inherit;
+}
+
+.vehicle-card form input:focus,
+.vehicle-card form select:focus {
+    border-color: #1781ff;
+}
+
+/* 5. إصلاح الـ Grid الخاص بحقلي الـ Color والـ Type جنباً إلى جنب */
+.vehicle-card .time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* 6. إعادة إحياء زر الـ Add Vehicle بالـ ستايل الأزرق الجميل */
+.vehicle-card .confirm-btn {
+    background: #1781ff;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    color: white;
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.vehicle-card .confirm-btn:hover {
+    background: #1266cc; /* تأثير خفيف عند تمرير الماوس */
+}
+
+.vehicle-card .confirm-btn:disabled {
+    background: #333;
+    cursor: not-allowed;
+}
+
+/* تظبيط زر الـ Cancel العلوي ليظهر بشكل لائق */
+.back-btn {
+    color: #888;
+    align-self: flex-start;
+    transition: color 0.3s;
+}
+.back-btn:hover {
+    color: white;
+}
+
+
+/* ضبط المسافات العمودية بين الحقول */
+.vehicle-card .input-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 20px; /* زيادة المسافة من فوق عشان الحقل يتنفس عن اللي قبله */
+    margin-bottom: 5px;
+}
+
+/* إعطاء مسافة صغيرة بين الـ Label والـ Input اللي تحته مباشرة */
+.vehicle-card .input-wrapper label {
+    margin-bottom: 8px; /* مسافة مريحة للعين */
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+/* ضبط الـ Grid الخاص بـ Color و Type ليتوزعوا بكامل العرض */
+.vehicle-card .time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; /* مسافة أوسع شوية بين الحقلين */
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* تأمين أن الـ select والـ input جوه الجريد ياخدوا 100% بدون تشويه */
+.vehicle-card .time-grid .input-wrapper {
+    margin-top: 0; /* إلغاء المارجن العلوي داخل الجريد عشان يمشوا على خط واحد */
+}
+
+

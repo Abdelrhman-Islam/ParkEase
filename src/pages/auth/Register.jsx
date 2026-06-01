@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import api from '../../api/axios'; 
@@ -23,11 +22,14 @@ const Register = () => {
         try {
             const res = await api.post('/register', formData);
             
-            // سحب التوكن أياً كان مسماه من الباك إند
             const token = res.data.token || res.data.access_token;
             
-            Cookies.set('token', token, { expires: 7, secure: true, sameSite: 'strict' });
+            // تخزين التوكن واليوزر في الـ LocalStorage مباشرة
+            localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
+            
+            // تمرير التوكن للهيدر في الريكويست الحالي احتياطياً
+            api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             
             navigate('/garages');
         } catch (err) {

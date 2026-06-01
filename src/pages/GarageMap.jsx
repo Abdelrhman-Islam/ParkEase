@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // ضيف دي
+import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import '../layouts/GarageMap.css';
 import Navbar from '../components/Navbar';
 import ParkingSpot from '../components/ParkingSpot';
     
 const GarageMap = () => {
-    const navigate = useNavigate(); // تعريف الـ navigate
+    const navigate = useNavigate();
     const [spots, setSpots] = useState([]);
     const [levels, setLevels] = useState([]); 
     const [currentLevel, setCurrentLevel] = useState(null);
@@ -24,18 +24,28 @@ const GarageMap = () => {
     }, []);
     
     const handleBooking = (spot) => {
-        // حساب الوقت تلقائياً: دلوقتي و بعد ساعة
-        const startTime = new Date();
-        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); 
+        const now = new Date();
+        const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); 
 
-        // نبعت البيانات لصفحة الـ vehicle-form
+        // استخراج التاريخ بصيغة YYYY-MM-DD
+        const date = now.toISOString().split('T')[0];
+
+        // دالة مساعدة لضمان صيغة HH:mm بنظام 24 ساعة آمنة تماماً
+        const format24h = (dateObj) => {
+            const hours = String(dateObj.getHours()).padStart(2, '0');
+            const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+            return `${hours}:${minutes}`;
+        };
+
+        // نبعت البيانات مطبوخة وجاهزة لصفحة الـ vehicle-form
         navigate('/booking', { 
             state: { 
                 spot, 
                 currentLevel,
                 times: {
-                    start: startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    end: endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    date: date,
+                    start: format24h(now),
+                    end: format24h(oneHourLater)
                 }
             } 
         });
@@ -73,7 +83,6 @@ const GarageMap = () => {
 
     return (
         <>
-
         <Navbar/>
         <div className="parking-wrapper">
             <div className="parking-container">

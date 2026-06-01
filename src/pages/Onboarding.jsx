@@ -1,15 +1,17 @@
 import React from 'react';
-import '../layouts/Onboarding.css'; // استيراد الـ CSS الخاص بالصفحة
+import '../layouts/Onboarding.css'; 
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 
 const Onboarding = () => {
+  // التشيك على وجود التوكن لتحديد وجهة الزرار أوتوماتيك
+  const isAuthenticated = !!localStorage.getItem('token');
+
   return (
-    
-<div className="page-shell">
-    <Navbar/>
-    
+    <div className="page-shell">
+      <Navbar/>
+      
       <main className="hero">
         <section className="hero-copy">
           <h1>Welcome to<br />ParkEase</h1>
@@ -33,12 +35,17 @@ const Onboarding = () => {
             />
           </div>
 
-          <Link to="/garages" className="cta-button">Get Started</Link>
+          {/* لو مسجل يروح للجراجات، مش مسجل يروح للوجين */}
+          <Link 
+            to={isAuthenticated ? "/garages" : "/login"} 
+            className="cta-button"
+          >
+            Get Started
+          </Link>
         </section>
 
         <section className="hero-visual">
           <div className="visual-glow"></div>
-          {/* استخدمنا motion عشان الـ floating اللي اتفقنا عليه */}
           <motion.img 
             src="/car_fixed_transparent.png" 
             alt="ParkEase car" 

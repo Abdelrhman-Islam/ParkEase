@@ -2,18 +2,38 @@ import React from 'react';
 import '../layouts/ParkingSpot.css';
 
 const ParkingSpot = ({ spot, isSelected, onSelect }) => {
-    // تحديد الحالة: متاح، مشغول، أو تم اختياره
-    const status = spot.status === 'occupied' ? 'occupied' : (isSelected ? 'selected' : 'available');
+    const isOccupied = spot.status === 'occupied';
+    
+    // تحديد الكلاس المناسب بناءً على الحالة
+    const statusClass = isOccupied ? 'occupied' : (isSelected ? 'selected' : 'available');
+
+    const handleClick = () => {
+        if (!isOccupied && onSelect) {
+            onSelect(spot);
+        }
+    };
 
     return (
         <div 
-            className={`parking-spot ${status}`} 
-            onClick={() => spot.status === 'available' && onSelect(spot)}
+            className={`parking-spot ${statusClass}`} 
+            onClick={handleClick}
+            // تحسين الـ UX: منع الـ click تماماً لو مشغول عشان الـ CSS hover ميبقاش مربك
+            style={{ cursor: isOccupied ? 'not-allowed' : 'pointer' }}
+            // دعم قارئات الشاشة (Accessibility)
+            role="button"
+            aria-pressed={isSelected}
+            aria-disabled={isOccupied}
         >
-            {/* عرض اسم الـ Spot (A1, B5, etc) */}
             <span className="spot-name">{spot.name}</span>
         </div>
     );
 };
 
-export default ParkingSpot;
+// استخدام React.memo لمنع إعادة ريندر الأماكن التانية اللي متأثرتش بالاختيار
+export default React.memo(ParkingSpot, (prevProps, nextProps) => {
+    return (
+        prevProps.isSelected === nextProps.isSelected &&
+        prevProps.spot.status === nextProps.spot.status &&
+        prevProps.spot.name === nextProps.spot.name
+    );
+});
